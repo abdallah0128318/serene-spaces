@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
+const User = require('./models/user.model.js')
 // initialize 'dotenv' package
 dotenv.config()
 // create an express app
@@ -12,4 +13,7 @@ mongoose.connect(process.env.MONGO_CONN_STR).then(data => {
     })
 }).catch(err => console.log(err))
 
+app.get('/', (req, res) => {
+    User.find().then(data => res.json(data)).catch(err => console.log(err))
+})
 
