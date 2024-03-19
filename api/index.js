@@ -18,6 +18,18 @@ mongoose.connect(process.env.MONGO_CONN_STR).then(data => {
 }).catch(err => console.log(err))
 
 
+// here are our routes "treat them as middleware functions as they are executed during thje request-response 
+// cycle and each function can end the request-respopnse cycle"
+
 app.use('/users', userRouter)
 app.use('/auth', authRouter)
+
+// here is a middleare function to format the json response if there is an error
+app.use((err, req, res, next)=>{
+    const statusCode = err.statusCode || 500
+    const message = err.message || "Internal Eerver Error"
+    res.json({success: false, statusCode, message})
+})
+
+
 
