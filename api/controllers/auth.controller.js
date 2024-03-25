@@ -1,23 +1,19 @@
 const User = require('../models/user.model')
 const bcryptjs = require('bcryptjs');
+const {userValidation} = require('../utils/validation.js')
 
 
-const signup = (req, res, next)=>{
-  const {username, email, password} = req.body;
-  const encryptedPassword = bcryptjs.hashSync(password)
-  const newUser = new User({username, email, password: encryptedPassword})
-  newUser.save().then(data => {
-    res.status(200).json(data)
-  }).catch(err => next(err))
+exports.signup = async (req, res, next)=>{
+    const errors = await userValidation(User, req.body)
+    if(!errors)
+    {
+        const {username, email, password} = req.body;
+        const hashedPassword = bcryptjs.hashSync(password)
+        const user = await User.create({username, email, password:hashedPassword});
+        res.status(201).json(user);
+    }
+    else{
+        res.status(401).json(errors);
+    }   
 }
 
-
-
-
-
-
-
-
-module.exports = {
-    signup
-}
