@@ -4,16 +4,16 @@ const {userValidation} = require('../utils/validation.js')
 
 
 exports.signup = async (req, res, next)=>{
-    const errors = await userValidation(User, req.body)
-    if(!errors)
+    const result = await userValidation(User, req.body)
+    if(result.success)
     {
-        const {username, email, password} = req.body;
+        const {username, email, password} = result.data;
         const hashedPassword = bcryptjs.hashSync(password)
         const user = await User.create({username, email, password:hashedPassword});
         res.status(201).json(user);
     }
-    else{
-        res.status(401).json(errors);
+    else if(!result.success){
+        res.status(401).json(result.errorMsg);
     }   
 }
 

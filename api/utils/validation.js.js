@@ -1,5 +1,5 @@
 // Here i will write al validation functions
-
+// this function returns an object with data or error depending on 'success' flag
 exports.userValidation = async (model, data)=>{
     try {
         const {username, email, password} = data;
@@ -20,7 +20,10 @@ exports.userValidation = async (model, data)=>{
             throw new Error("This email is already existing");
         }
 
+        return {success: 1, data}
+
     } catch (error) {
-        return error.message;
+        const errorMsg = error.message
+        return {success: 0, errorMsg};
     }
 }

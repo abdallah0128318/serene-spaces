@@ -1,12 +1,15 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
+const cors = require('cors')
 const User = require('./models/user.model')
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route')
 // create an express app
 const app = express()
-// configure the serv er to receive json data
+// use cors to allow 'cross origin request sharing'
+app.use(cors());
+// configure the server to receive json data
 app.use(express.json())
 // initialize 'dotenv' package
 dotenv.config()
